@@ -3,9 +3,11 @@
 ## Setup
 - Fork and Clone this repo
 - <code>touch secret.py</code> in the flask_app directory
+- Add the following values to the <code>secret.py</code> file:
   - user_id = [from spotify user acount](https://www.spotify.com/)
-  - client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login)
-  - client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login)
+  - client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
+  - client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
+  - redirect_uri= "https://spotify-playlist-buddy.vercel.app/" (You can use this uri as your redirects_uri or your own)
 
 ## Bash file
 [Spotify Bash File](https://github.com/StefonSimmons/spotify_bash_file)

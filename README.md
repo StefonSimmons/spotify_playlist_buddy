@@ -1,11 +1,20 @@
-# spotify_playlist_buddy
+# Spotify Playlist Buddy
 
-## Bash File
+## Setup
+- Fork and Clone this repo
+- <code>touch secret.py</code> in the flask_app directory
+  - user_id = [from spotify user acount](https://www.spotify.com/)
+  - client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login)
+  - client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login)
+
+## Bash file
 [Spotify Bash File](https://github.com/StefonSimmons/spotify_bash_file)
 
-> Add this script to your shell's confifuration file (.bashrc, .zshrc etc.)
+> Add this script to your shell's confifuration file (.bashrc, .zshrc etc.).
+> 
+> Allows you to run the Spotify Buddy program from the terminal
 
-## How to use:
+## How to run the program:
 > Save changes: restart terminal or run <code>source .bashrc</code>
 > 
 > Follow the prompts for each bash command:
@@ -33,7 +42,6 @@ Found:{
  Song: Love Like This
  Artist: Faith Evans
 }
-
 ```
 
 **List of user playlists:**
@@ -53,7 +61,7 @@ spotify pause
 
 
 ## Flask App
-> Server is not being used currently
+> <p style="color: red;">Server is not being used currently</p>
 
 - Create Virtual Environment for installations using venv module: 
 ```bash

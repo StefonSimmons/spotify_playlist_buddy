@@ -138,6 +138,8 @@ class Playlist:
     # get OAuth Token for User Acct Access- https://developer.spotify.com/documentation/general/guides/authorization-guide/#client-credentials-flow
     def get_user_auth_token(self,refresh_code):
         client_cred=client_id+":"+client_secret
+        print("REFRESH: ", refresh_code)
+        print("ID ",client_id," SECRET ", client_secret)
         encoded_bytes = base64.b64encode(client_cred.encode("utf-8")) #base64 encoded client_id:client_secret. https://www.base64encoder.io/python/
         encoded_client = str(encoded_bytes, "utf-8")
         headers = {
@@ -145,10 +147,11 @@ class Playlist:
             "Authorization": "Basic {}".format(encoded_client)
         }
         url = "https://accounts.spotify.com/api/token/"
-        data = "grant_type=authorization_code&code={}&redirect_uri=http://127.0.0.1:5500/".format(refresh_code)
+        data = "grant_type=authorization_code&code={}&redirect_uri=https://spotify-playlist-buddy.vercel.app/".format(refresh_code)
         try:
             res = requests.post(url, data=data, headers=headers)
             res_json = res.json()
+            print("RES ",res_json)
             self.token = res_json["access_token"]
         except Exception as e:
             print("Get Token ERROR: ", e)

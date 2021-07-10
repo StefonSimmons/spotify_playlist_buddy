@@ -156,9 +156,9 @@ class Playlist:
     def get_user_approval(self):
         client_query = "client_id={}".format(client_id)
         response_query = "response_type=code"
-        redirect_uri = "redirect_uri={}".format(redirect_uri)
+        redirect_uri_param = "redirect_uri={}".format(redirect_uri)
         scopes = "scope=user-read-private playlist-modify-private playlist-modify-public playlist-read-private user-modify-playback-state"
-        url = "https://accounts.spotify.com/authorize?{}&{}&{}&{}".format(client_query, response_query, redirect_uri, scopes)
+        url = "https://accounts.spotify.com/authorize?{}&{}&{}&{}".format(client_query, response_query, redirect_uri_param, scopes)
         
         try:
             res = requests.get(url)

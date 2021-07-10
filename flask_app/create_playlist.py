@@ -14,7 +14,7 @@ class Playlist:
         self.song_uri = ""
 
     # create a playlist on my account 
-    def create_playlist(self, name, description, public=False):    
+    def create_playlist(self, name, description, public):    
         data = json.dumps({
             "name": name,
             "description": description,
@@ -65,10 +65,11 @@ class Playlist:
         }
         try:
             res = requests.post(url, data=data, headers=headers)
-            print("\n",res.json())
+            print("\nAdded to playlist: ",res.json())
         except Exception as e:
             print("Add Song ERROR: ", e)
 
+    # get a list of playlists
     def get_playlists(self):
         url = "https://api.spotify.com/v1/me/playlists"
         headers ={
@@ -92,6 +93,28 @@ class Playlist:
 
         except Exception as e:
             print("Get Playlists Error: ", e)
+
+    def play(self):
+        url = "https://api.spotify.com/v1/me/player/play"
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer {}".format(self.token)
+        }
+        try: 
+            requests.put(url, headers=headers)
+        except Exception as e:
+            print("PLAY Error: ", e)
+
+    def pause(self):
+        url = "https://api.spotify.com/v1/me/player/pause"
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer {}".format(self.token)
+        }
+        try: 
+            requests.put(url, headers=headers)
+        except Exception as e:
+            print("PAUSE Error: ", e)
 
     # get OAuth Token for Searching
     def get_client_flow_token(self):
@@ -135,7 +158,7 @@ class Playlist:
         client_query = "client_id={}".format(client_id)
         response_query = "response_type=code"
         redirect_uri = "redirect_uri=http://127.0.0.1:5500/"
-        scopes = "scope=user-read-private playlist-modify-private playlist-modify-public playlist-read-private"
+        scopes = "scope=user-read-private playlist-modify-private playlist-modify-public playlist-read-private user-modify-playback-state"
         url = "https://accounts.spotify.com/authorize?{}&{}&{}&{}".format(client_query, response_query, redirect_uri, scopes)
         
         try:
@@ -143,28 +166,40 @@ class Playlist:
             webbrowser.open(res.url)
         except Exception as e:  
             print('Refresh: ', e)
+
     
 
 new_list = Playlist()
 
+def run_user_auth_process():
+    new_list.get_user_approval()
+    new_list.get_user_auth_token(input("Enter refresh code: "))
 
 if sys.argv[1] == "cp":
     description = ' '.join(sys.argv[3:])
-    new_list.get_user_approval()
-    new_list.get_user_auth_token(input("Enter refresh code: "))
-    new_list.create_playlist(sys.argv[2], description)
+    private = input("Is {} Public? (Y)".format(sys.argv[2]))
+    if private == "Y": private = True
+    else: private = False
+    run_user_auth_process()
+    new_list.create_playlist(sys.argv[2], description, private)
 elif sys.argv[1] == "s":
     query = ' '.join(sys.argv[2:])
     new_list.search_spotify(query)
-    playlist_id = input("\nAdd To a Playlist:\nEnter <Playlist_ID> or <Return> to exit: ")
-    if len(playlist_id):
-        new_list.get_user_approval()
-        new_list.get_user_auth_token(input("Enter refresh code: "))
+    continue_ = input("\nAdd to Playlist (Y or N)? ")
+    print("")
+    if continue_.upper() == "Y":
+        run_user_auth_process()
+        new_list.get_playlists()
+        playlist_id = input("\nEnter <Playlist_ID>: ")
         new_list.add_song_to_playlist(playlist_id)
-elif sys.argv[1] == "p":
-    new_list.get_user_approval()
-    new_list.get_user_auth_token(input("Enter refresh code: "))
+elif sys.argv[1] == "list":
+    run_user_auth_process()
     new_list.get_playlists()
 
+elif sys.argv[1] == "play":
+    run_user_auth_process()
+    new_list.play()
 
-
+elif sys.argv[1] == "pause":
+    run_user_auth_process()
+    new_list.pause()

@@ -3,7 +3,7 @@ import webbrowser
 import json
 import sys
 import base64
-from secret import user_id, client_id, client_secret
+from secret import user_id, client_id, client_secret, redirect_uri
 
 
 class Playlist:
@@ -11,7 +11,6 @@ class Playlist:
     def __init__(self):
         self.token = ""
         self.song_uri = ""
-        self.redirect_uri = "https://spotify-playlist-buddy.vercel.app/"
 
     # create a playlist on my account 
     def create_playlist(self, name, description, public):    
@@ -145,7 +144,7 @@ class Playlist:
             "Authorization": "Basic {}".format(encoded_client)
         }
         url = "https://accounts.spotify.com/api/token/"
-        data = "grant_type=authorization_code&code={}&redirect_uri={}".format(refresh_code, self.redirect_uri)
+        data = "grant_type=authorization_code&code={}&redirect_uri={}".format(refresh_code, redirect_uri)
         try:
             res = requests.post(url, data=data, headers=headers)
             res_json = res.json()
@@ -157,7 +156,7 @@ class Playlist:
     def get_user_approval(self):
         client_query = "client_id={}".format(client_id)
         response_query = "response_type=code"
-        redirect_uri = "redirect_uri={}".format(self.redirect_uri)
+        redirect_uri = "redirect_uri={}".format(redirect_uri)
         scopes = "scope=user-read-private playlist-modify-private playlist-modify-public playlist-read-private user-modify-playback-state"
         url = "https://accounts.spotify.com/authorize?{}&{}&{}&{}".format(client_query, response_query, redirect_uri, scopes)
         

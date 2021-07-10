@@ -1,6 +1,59 @@
 # spotify_playlist_buddy
 
+## Bash File
+[Spotify Bash File](https://github.com/StefonSimmons/spotify_bash_file)
+
+> Add this script to your shell's confifuration file (.bashrc, .zshrc etc.)
+
+## How to use:
+> Save changes: restart terminal or run <code>source .bashrc</code>
+> 
+> Follow the prompts for each bash command:
+
+**Create a playlist:**
+```bash
+spotify cp <name> "<description>"
+```
+> Example:
+```bash
+spotify cp Cookout-Playlist "Family and Summertime vibes"
+```
+
+**Search Spotify:**
+```bash
+spotify s "<query>"
+```
+> Example:
+```bash
+spotify s "Love Like Faith"
+
+Searching for Love Like Faith...
+
+Found:{
+ Song: Love Like This
+ Artist: Faith Evans
+}
+
+```
+
+**List of user playlists:**
+```bash
+spotify list
+```
+
+**Play user Spotify player:**
+```bash
+spotify play
+```
+
+**Pause user Spotify player:**
+```bash
+spotify pause
+```
+
+
 ## Flask App
+> Server is not being used currently
 
 - Create Virtual Environment for installations using venv module: 
 ```bash

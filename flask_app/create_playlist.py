@@ -187,7 +187,7 @@ new_list = Playlist()
 
 def run_user_auth_process():
     new_list.get_user_approval()
-    new_list.get_user_auth_token(input("Enter refresh code: "))
+    new_list.get_user_auth_token(input("Enter auth code: "))
 
 if sys.argv[1] == "cp":
     description = ' '.join(sys.argv[3:])

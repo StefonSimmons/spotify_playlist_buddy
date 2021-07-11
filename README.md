@@ -4,6 +4,7 @@ Are you a Developer? Do you have a Spotify account? Have you ever had the desire
 
 A terminal-based program mostly written in Python.
 
+<img src="https://media.giphy.com/media/m64mkbfNh0vBKMfYaC/giphy.gif" width="350px" alt="spotify-buddy"/>
 
 ## Setup
 - Fork and Clone this repo

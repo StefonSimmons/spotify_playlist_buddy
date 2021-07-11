@@ -44,7 +44,7 @@ class Playlist:
             res_json = res.json()
             song = res_json["tracks"]["items"][0]
             song_uri = song["uri"]
-            song_info = "Song: {}\n Artist: {}".format(song["name"], song["artists"][0]["name"])
+            song_info = "Song: {}\n Artist: {}\n SongURI: {}".format(song["name"], song["artists"][0]["name"], song_uri)
             self.song_uri = song_uri
             print("\n")
             print("Found:{ \n",song_info, "\n}")
@@ -91,7 +91,7 @@ class Playlist:
         except Exception as e:
             print("Get Playlists Error: ", e)
 
-    # play user's spotify player on running device
+    # play currently paused song on user's active player
     def play(self):
         url = "https://api.spotify.com/v1/me/player/play"
         headers={
@@ -102,6 +102,21 @@ class Playlist:
             requests.put(url, headers=headers)
         except Exception as e:
             print("PLAY Error: ", e)
+
+    # play a specific song on user's active player
+    def play_a_song(self):
+        url = "https://api.spotify.com/v1/me/player/play"
+        data = json.dumps({
+            "uris": [self.song_uri]
+        })
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer {}".format(self.token)
+        }   
+        try:
+            requests.put(url, data=data, headers=headers)
+        except Exception as e:
+            print("Play specific song: ", e)
 
     # pause user's spotify player on running device
     def pause(self):
@@ -184,10 +199,13 @@ if sys.argv[1] == "cp":
 elif sys.argv[1] == "s":
     query = ' '.join(sys.argv[2:])
     new_list.search_spotify(query)
+    play_it = input("\nPlay this song (Y or N)? ")
+    if play_it.upper() == "Y":
+        run_user_auth_process()
+        new_list.play_a_song()
     continue_ = input("\nAdd to Playlist (Y or N)? ")
     print("")
     if continue_.upper() == "Y":
-        run_user_auth_process()
         new_list.get_playlists()
         playlist_id = input("\nEnter <Playlist_ID>: ")
         new_list.add_song_to_playlist(playlist_id)

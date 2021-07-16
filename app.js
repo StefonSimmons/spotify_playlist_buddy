@@ -1,4 +1,4 @@
-import axios from "axios";
+const axios = require("axios");
 const button = document.querySelector("button");
 
 async function passAuthCode() {

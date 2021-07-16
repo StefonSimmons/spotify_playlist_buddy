@@ -1,4 +1,3 @@
-const axios = require("axios");
 const button = document.querySelector("button");
 
 async function passAuthCode() {

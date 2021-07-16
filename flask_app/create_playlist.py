@@ -100,6 +100,7 @@ class Playlist:
         }
         try: 
             requests.put(url, headers=headers)
+            print("Playing?")
         except Exception as e:
             print("PLAY Error: ", e)
 
@@ -112,9 +113,10 @@ class Playlist:
         headers={
             "Content-Type": "application/json",
             "Authorization": "Bearer {}".format(self.token)
-        }   
+        }  
         try:
             requests.put(url, data=data, headers=headers)
+            print("Playing a song") 
         except Exception as e:
             print("Play specific song: ", e)
 
@@ -129,6 +131,22 @@ class Playlist:
             requests.put(url, headers=headers)
         except Exception as e:
             print("PAUSE Error: ", e)
+
+    # activates user device
+    def activate_device(self):
+        url = "https://api.spotify.com/v1/me/player"
+        data = json.dumps({
+            "device_ids":["753ebdc99cea79ac9c2fb2ca2f696e6acdc10145"],
+            "play": False
+        })
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer {}".format(self.token)
+        }
+        try:
+            requests.put(url, data=data, headers=headers)
+        except Exception as e:
+            print("Activate Device: ", e)
 
     # get OAuth Token for Searching
     def get_client_flow_token(self):
@@ -172,7 +190,7 @@ class Playlist:
         client_query = "client_id={}".format(client_id)
         response_query = "response_type=code"
         redirect_uri_param = "redirect_uri={}".format(redirect_uri)
-        scopes = "scope=user-read-private playlist-modify-private playlist-modify-public playlist-read-private user-modify-playback-state"
+        scopes = "scope=user-read-private playlist-modify-private playlist-modify-public playlist-read-private user-modify-playback-state user-read-playback-state"
         url = "https://accounts.spotify.com/authorize?{}&{}&{}&{}".format(client_query, response_query, redirect_uri_param, scopes)
         
         try:
@@ -202,6 +220,7 @@ elif sys.argv[1] == "s":
     play_it = input("\nPlay this song (Y or N)? ")
     if play_it.upper() == "Y":
         run_user_auth_process()
+        # new_list.activate_device()
         new_list.play_a_song()
     continue_ = input("\nAdd to Playlist (Y or N)? ")
     print("")
@@ -215,6 +234,7 @@ elif sys.argv[1] == "list":
 
 elif sys.argv[1] == "play":
     run_user_auth_process()
+    # new_list.activate_device()
     new_list.play()
 
 elif sys.argv[1] == "pause":

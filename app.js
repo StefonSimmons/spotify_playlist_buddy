@@ -1,14 +1,19 @@
-const button = document.querySelector("button");
+const form = document.querySelector("form");
 
-async function passAuthCode() {
+async function passAuthCode(e) {
+  e.preventDefault()
   const search_parameter = window.location.search;
   const code = search_parameter.split("=")[1];
   const url = "http://127.0.0.1:5000/code/";
-  const res = await axios.post(url, { code });
-  console.log(res)
-  window.close();
+  try {
+    const res = await axios.post(url, { code });
+    console.log(res)
+    // window.close();
+  } catch (error) {
+    console.error(error.message)
+  }
 }
-button.addEventListener("click", passAuthCode);
+form.addEventListener("submit", passAuthCode);
 
 //  const showCode = () =>{
 //    const codeInput = document.querySelector('.code')

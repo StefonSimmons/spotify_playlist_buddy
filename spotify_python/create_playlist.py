@@ -11,6 +11,7 @@ class Playlist:
     def __init__(self):
         self.token = ""
         self.song_uri = ""
+        self.playlists = []
 
     # create a playlist on my account 
     def create_playlist(self, name, description, public):    
@@ -53,8 +54,9 @@ class Playlist:
             print("Searching ERROR  ",e)
 
     # add song to playlist on spotify 
-    def add_song_to_playlist(self, playlist_id):
-        url = "https://api.spotify.com/v1/playlists/{}/tracks".format(playlist_id)
+    def add_song_to_playlist(self, playlist_idx):
+        playlist = self.playlists[int(playlist_idx)-1]
+        url = "https://api.spotify.com/v1/playlists/{}/tracks".format(playlist["id"])
         data = json.dumps([self.song_uri])
         headers = {
             "Content-Type": "application/json",
@@ -78,17 +80,21 @@ class Playlist:
             res_json = res.json()
             def get_properties(playlist):
                 return {
-                    "id": playlist["id"],
                     "name": playlist["name"],
-                    "public": playlist["public"]
+                    "public": playlist["public"],
+                    "id": playlist["id"],
                 }
             playlists = map(get_properties, res_json["items"])
             print("\n====== Playlists ======\n")
+            count = 1
             for p in playlists:
-                print(p)
+                self.playlists.append(p)
+                print(f'idx:{count}',p)
+                count += 1
             print("\n")
 
         except Exception as e:
+            self.run_user_auth_process()
             print("Get Playlists Error: ", e)
 
     # play currently paused song on user's active player
@@ -101,6 +107,7 @@ class Playlist:
         try: 
             requests.put(url, headers=headers)
         except Exception as e:
+            self.run_user_auth_process()
             print("PLAY Error: ", e)
 
     # play a specific song on user's active player
@@ -116,6 +123,7 @@ class Playlist:
         try:
             requests.put(url, data=data, headers=headers)
         except Exception as e:
+            self.run_user_auth_process()
             print("Play specific song: ", e)
 
     # pause user's spotify player on running device
@@ -128,6 +136,7 @@ class Playlist:
         try: 
             requests.put(url, headers=headers)
         except Exception as e:
+            self.run_user_auth_process()
             print("PAUSE Error: ", e)
 
     # get OAuth Token for Searching
@@ -164,6 +173,9 @@ class Playlist:
             res = requests.post(url, data=data, headers=headers)
             res_json = res.json()
             self.token = res_json["access_token"]
+            auth_file = open('./access_token.txt', 'w')
+            auth_file.write(self.token)
+            auth_file.close()
         except Exception as e:
             print("Get Token ERROR: ", e)
 
@@ -181,42 +193,47 @@ class Playlist:
         except Exception as e:  
             print('Refresh: ', e)
 
+    def run_user_auth_process(self):
+        self.get_user_approval()
+        self.get_user_auth_token(input("Enter auth code: "))
     
 
 new_list = Playlist()
 
-def run_user_auth_process():
-    new_list.get_user_approval()
-    new_list.get_user_auth_token(input("Enter auth code: "))
 
+def get_auth_token_from_store():
+  with open("./access_token.txt", "r") as f:
+    auth_token = f.read() ##Assume the sample file has 3 lines
+    new_list.token = auth_token
+    
 if sys.argv[1] == "cp":
     description = ' '.join(sys.argv[3:])
     public = input("Is {} Public? (Y)".format(sys.argv[2]))
     if public == "Y": public = True
     else: public = False
-    run_user_auth_process()
+    get_auth_token_from_store()
     new_list.create_playlist(sys.argv[2], description, public)
 elif sys.argv[1] == "s":
     query = ' '.join(sys.argv[2:])
     new_list.search_spotify(query)
     play_it = input("\nPlay this song (Y or N)? ")
     if play_it.upper() == "Y":
-        run_user_auth_process()
+        get_auth_token_from_store()
         new_list.play_a_song()
     continue_ = input("\nAdd to Playlist (Y or N)? ")
     print("")
     if continue_.upper() == "Y":
         new_list.get_playlists()
-        playlist_id = input("\nEnter <Playlist_ID>: ")
-        new_list.add_song_to_playlist(playlist_id)
+        playlist_idx = input("\nEnter <Playlist_IDX>: ")
+        new_list.add_song_to_playlist(playlist_idx)
 elif sys.argv[1] == "list":
-    run_user_auth_process()
+    get_auth_token_from_store()
     new_list.get_playlists()
 
 elif sys.argv[1] == "play":
-    run_user_auth_process()
+    get_auth_token_from_store()
     new_list.play()
 
 elif sys.argv[1] == "pause":
-    run_user_auth_process()
+    get_auth_token_from_store()
     new_list.pause()

@@ -219,7 +219,7 @@ new_list = Playlist()
 
 def get_auth_token_from_store():
   with open("./access_token.txt", "r") as f:
-    auth_token = f.read() ##Assume the sample file has 3 lines
+    auth_token = f.read()
     new_list.token = auth_token
     
 if sys.argv[1] == "cp":

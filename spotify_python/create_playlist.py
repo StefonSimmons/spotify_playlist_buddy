@@ -211,7 +211,7 @@ class Playlist:
 
     def run_user_auth_process(self):
         self.get_user_approval()
-        self.get_user_auth_token(input("Enter auth code: "))
+        self.get_user_auth_token(input("Enter refresh code: "))
     
 
 new_list = Playlist()

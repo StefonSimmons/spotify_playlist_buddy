@@ -7,10 +7,15 @@
     <script defer src="app.js"></script>
     <title>Welcome</title>
 </head>
-<body>
-    <h1>SPOTIFY Authorization</h1>
-    <p>copy and paste the code in your terminal</p>
-    <input type="text" class="code"/>
-    <button>Copy Code</button>
+<body style="height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 30px; box-sizing: border-box;">
+  <main>
+    <h1 style="margin: 0;">SPOTIFY Authorization</h1>
+    <p>copy and paste the refresh code in your terminal to continue</p>
+    <div style="display: flex">
+      <textarea type="text" class="code" style="width: 500px; height: auto"></textarea>
+      <button>Copy Code</button>
+    </div>
+  </main>
+  <footer>&#169; Stefon Simmons</footer>
 </body>
 </html>

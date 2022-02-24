@@ -1,3 +1,4 @@
 secret.py
 __pycache__
-spotty
+senv
+access_token.txt

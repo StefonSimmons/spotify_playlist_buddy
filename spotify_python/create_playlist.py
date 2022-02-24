@@ -11,9 +11,10 @@ class Playlist:
     def __init__(self):
         self.token = ""
         self.song_uri = ""
+        self.playlists = []
 
-    # create a playlist on my account 
-    def create_playlist(self, name, description, public):    
+    # create a playlist on my account
+    def create_playlist(self, name, description, public):
         data = json.dumps({
             "name": name,
             "description": description,
@@ -28,12 +29,12 @@ class Playlist:
             res = requests.post(url, data=data, headers=headers)
             res_json = res.json()
             print("\nPlaylist_ID: ", res_json["id"])
-        except Exception as e: 
-            print("Create Playlist ERROR ",e)
+        except Exception as e:
+            print("Create Playlist ERROR ", e)
 
     #  search for a song on spotify
-    def search_spotify(self,query):
-        self.get_client_flow_token()  
+    def search_spotify(self, query):
+        self.get_client_flow_token()
         url = f"https://api.spotify.com/v1/search?q={query}&type=track&market=us&limit=1"
         headers = {
             "Content-Type": "application/json",
@@ -44,17 +45,20 @@ class Playlist:
             res_json = res.json()
             song = res_json["tracks"]["items"][0]
             song_uri = song["uri"]
-            song_info = "Song: {}\n Artist: {}\n SongURI: {}".format(song["name"], song["artists"][0]["name"], song_uri)
+            song_info = "Song: {}\n Artist: {}\n SongURI: {}".format(
+                song["name"], song["artists"][0]["name"], song_uri)
             self.song_uri = song_uri
             print("\n")
-            print("Found:{ \n",song_info, "\n}")
+            print("Found:{ \n", song_info, "\n}")
             return song_uri
-        except Exception as e: 
-            print("Searching ERROR  ",e)
+        except Exception as e:
+            print("Searching ERROR  ", e)
 
-    # add song to playlist on spotify 
-    def add_song_to_playlist(self, playlist_id):
-        url = "https://api.spotify.com/v1/playlists/{}/tracks".format(playlist_id)
+    # add song to playlist on spotify
+    def add_song_to_playlist(self, playlist_idx):
+        playlist = self.playlists[int(playlist_idx)-1]
+        url = "https://api.spotify.com/v1/playlists/{}/tracks".format(
+            playlist["id"])
         data = json.dumps([self.song_uri])
         headers = {
             "Content-Type": "application/json",
@@ -62,31 +66,43 @@ class Playlist:
         }
         try:
             res = requests.post(url, data=data, headers=headers)
-            print("\nAdded to playlist: ",res.json())
+            if(res.status_code == 401):
+              self.run_user_auth_process()
+              self.add_song_to_playlist(playlist_idx)
+            else:
+              print("\nAdded to playlist: ", res.json())
         except Exception as e:
             print("Add Song ERROR: ", e)
 
     # get a list of playlists
     def get_playlists(self):
         url = "https://api.spotify.com/v1/me/playlists"
-        headers ={
+        headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer {}".format(self.token)
         }
         try:
             res = requests.get(url, headers=headers)
-            res_json = res.json()
-            def get_properties(playlist):
-                return {
-                    "id": playlist["id"],
-                    "name": playlist["name"],
-                    "public": playlist["public"]
-                }
-            playlists = map(get_properties, res_json["items"])
-            print("\n====== Playlists ======\n")
-            for p in playlists:
-                print(p)
-            print("\n")
+            if(res.status_code == 401):
+              self.run_user_auth_process()
+              self.get_playlists()
+            else:
+              res_json = res.json()
+
+              def get_properties(playlist):
+                  return {
+                      "name": playlist["name"],
+                      "public": playlist["public"],
+                      "id": playlist["id"],
+                  }
+              playlists = map(get_properties, res_json["items"])
+              print("\n====== Playlists ======\n")
+              count = 1
+              for p in playlists:
+                  self.playlists.append(p)
+                  print(f'idx:{count}', p)
+                  count += 1
+              print("\n")
 
         except Exception as e:
             print("Get Playlists Error: ", e)
@@ -94,12 +110,15 @@ class Playlist:
     # play currently paused song on user's active player
     def play(self):
         url = "https://api.spotify.com/v1/me/player/play"
-        headers={
+        headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer {}".format(self.token)
         }
-        try: 
-            requests.put(url, headers=headers)
+        try:
+            res = requests.put(url, headers=headers)
+            if(res.status_code == 401):
+              self.run_user_auth_process()
+              self.play()
         except Exception as e:
             print("PLAY Error: ", e)
 
@@ -109,24 +128,30 @@ class Playlist:
         data = json.dumps({
             "uris": [self.song_uri]
         })
-        headers={
+        headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer {}".format(self.token)
-        }   
+        }
         try:
-            requests.put(url, data=data, headers=headers)
+            res = requests.put(url, data=data, headers=headers)
+            if(res.status_code == 401):
+              self.run_user_auth_process()
+              self.play_a_song()
         except Exception as e:
             print("Play specific song: ", e)
 
     # pause user's spotify player on running device
     def pause(self):
         url = "https://api.spotify.com/v1/me/player/pause"
-        headers={
+        headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer {}".format(self.token)
         }
-        try: 
-            requests.put(url, headers=headers)
+        try:
+            res = requests.put(url, headers=headers)
+            if(res.status_code == 401):
+              self.run_user_auth_process()
+              self.pause() 
         except Exception as e:
             print("PAUSE Error: ", e)
 
@@ -164,10 +189,13 @@ class Playlist:
             res = requests.post(url, data=data, headers=headers)
             res_json = res.json()
             self.token = res_json["access_token"]
+            auth_file = open('./access_token.txt', 'w')
+            auth_file.write(self.token)
+            auth_file.close()
         except Exception as e:
             print("Get Token ERROR: ", e)
 
-    # get User Approval - authorization flow - https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
+    # get User Approval - authorization code flow - https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
     def get_user_approval(self):
         client_query = "client_id={}".format(client_id)
         response_query = "response_type=code"
@@ -181,42 +209,47 @@ class Playlist:
         except Exception as e:  
             print('Refresh: ', e)
 
+    def run_user_auth_process(self):
+        self.get_user_approval()
+        self.get_user_auth_token(input("Enter refresh code: "))
     
 
 new_list = Playlist()
 
-def run_user_auth_process():
-    new_list.get_user_approval()
-    new_list.get_user_auth_token(input("Enter auth code: "))
 
+def get_auth_token_from_store():
+  with open("./access_token.txt", "r") as f:
+    auth_token = f.read()
+    new_list.token = auth_token
+    
 if sys.argv[1] == "cp":
     description = ' '.join(sys.argv[3:])
     public = input("Is {} Public? (Y)".format(sys.argv[2]))
     if public == "Y": public = True
     else: public = False
-    run_user_auth_process()
+    get_auth_token_from_store()
     new_list.create_playlist(sys.argv[2], description, public)
 elif sys.argv[1] == "s":
     query = ' '.join(sys.argv[2:])
     new_list.search_spotify(query)
     play_it = input("\nPlay this song (Y or N)? ")
     if play_it.upper() == "Y":
-        run_user_auth_process()
+        get_auth_token_from_store()
         new_list.play_a_song()
     continue_ = input("\nAdd to Playlist (Y or N)? ")
     print("")
     if continue_.upper() == "Y":
         new_list.get_playlists()
-        playlist_id = input("\nEnter <Playlist_ID>: ")
-        new_list.add_song_to_playlist(playlist_id)
+        playlist_idx = input("\nEnter <Playlist_IDX>: ")
+        new_list.add_song_to_playlist(playlist_idx)
 elif sys.argv[1] == "list":
-    run_user_auth_process()
+    get_auth_token_from_store()
     new_list.get_playlists()
 
 elif sys.argv[1] == "play":
-    run_user_auth_process()
+    get_auth_token_from_store()
     new_list.play()
 
 elif sys.argv[1] == "pause":
-    run_user_auth_process()
+    get_auth_token_from_store()
     new_list.pause()

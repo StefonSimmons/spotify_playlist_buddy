@@ -5,13 +5,13 @@ import sys
 import base64
 from secret import user_id, client_id, client_secret, redirect_uri
 
+class Spotty:
 
-class Playlist:
-
-    def __init__(self):
+    def __init__(self, abs_path):
         self.token = ""
         self.song_uri = ""
         self.playlists = []
+        self.abs_path = abs_path
 
     # create a playlist on my account
     def create_playlist(self, name, description, public):
@@ -100,7 +100,7 @@ class Playlist:
               count = 1
               for p in playlists:
                   self.playlists.append(p)
-                  print(f'idx:{count}', p)
+                  print(f'idx: {count}', p)
                   count += 1
               print("\n")
 
@@ -189,7 +189,8 @@ class Playlist:
             res = requests.post(url, data=data, headers=headers)
             res_json = res.json()
             self.token = res_json["access_token"]
-            auth_file = open('./access_token.txt', 'w')
+            access_token_txt = "{}/access_token.txt".format(self.abs_path)
+            auth_file = open(access_token_txt, 'w')
             auth_file.write(self.token)
             auth_file.close()
         except Exception as e:
@@ -214,13 +215,17 @@ class Playlist:
         self.get_user_auth_token(input("Enter refresh code: "))
     
 
-new_list = Playlist()
 
+abs_path = sys.argv[0]
+end_idx = abs_path.rindex("/")
+
+buddy = Spotty(abs_path[0:end_idx])
 
 def get_auth_token_from_store():
-  with open("./access_token.txt", "r") as f:
+  access_token_txt = "{}/access_token.txt".format(abs_path[0:end_idx])
+  with open(access_token_txt, "r") as f:
     auth_token = f.read()
-    new_list.token = auth_token
+    buddy.token = auth_token
     
 if sys.argv[1] == "cp":
     description = ' '.join(sys.argv[3:])
@@ -228,28 +233,28 @@ if sys.argv[1] == "cp":
     if public == "Y": public = True
     else: public = False
     get_auth_token_from_store()
-    new_list.create_playlist(sys.argv[2], description, public)
+    buddy.create_playlist(sys.argv[2], description, public)
 elif sys.argv[1] == "s":
     query = ' '.join(sys.argv[2:])
-    new_list.search_spotify(query)
+    buddy.search_spotify(query)
     play_it = input("\nPlay this song (Y or N)? ")
     if play_it.upper() == "Y":
         get_auth_token_from_store()
-        new_list.play_a_song()
+        buddy.play_a_song()
     continue_ = input("\nAdd to Playlist (Y or N)? ")
     print("")
     if continue_.upper() == "Y":
-        new_list.get_playlists()
+        buddy.get_playlists()
         playlist_idx = input("\nEnter <Playlist_IDX>: ")
-        new_list.add_song_to_playlist(playlist_idx)
+        buddy.add_song_to_playlist(playlist_idx)
 elif sys.argv[1] == "list":
     get_auth_token_from_store()
-    new_list.get_playlists()
+    buddy.get_playlists()
 
 elif sys.argv[1] == "play":
     get_auth_token_from_store()
-    new_list.play()
+    buddy.play()
 
 elif sys.argv[1] == "pause":
     get_auth_token_from_store()
-    new_list.pause()
+    buddy.pause()

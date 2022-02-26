@@ -35,7 +35,7 @@ class Spotty:
     #  search for a song on spotify
     def search_spotify(self, query):
         self.get_client_flow_token()
-        url = f"https://api.spotify.com/v1/search?q={query}&type=track&market=us&limit=1"
+        url = "https://api.spotify.com/v1/search?q={}&type=track&market=us&limit=1".format(query)
         headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer {}".format(self.token)
@@ -100,7 +100,7 @@ class Spotty:
               count = 1
               for p in playlists:
                   self.playlists.append(p)
-                  print(f'idx: {count}', p)
+                  print('idx: {}'.format(count), p)
                   count += 1
               print("\n")
 

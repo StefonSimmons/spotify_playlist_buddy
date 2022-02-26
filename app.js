@@ -7,9 +7,9 @@ const search_parameter = window.location.search
 const code = search_parameter.split("=")[1]
 codeInput.value = code
 
-const showCode = () => {
+const showCode = async () => {
   codeInput.select(); // select the text
-  document.execCommand("copy"); // copy text
+  await navigator.clipboard.writeText(codeInput.value) // copy text
   window.close()
 }
 

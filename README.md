@@ -68,12 +68,12 @@ spotify s "<query>"
 ```bash
 spotify s "Love Like Faith"
 
-Searching for Love Like Faith...
+# Searching for Love Like Faith...
 
-Found:{
- Song: Love Like This
- Artist: Faith Evans
-}
+# Found:{
+#  Song: Love Like This
+#  Artist: Faith Evans
+# }
 ```
 
 **List of user playlists:**

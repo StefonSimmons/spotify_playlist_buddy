@@ -27,5 +27,5 @@ setup: secret_file auth_file virtual_environment
 
 install:
 	@echo "installing dependencies.."
-	@pip install -r requirements.txt
+	@pip install -r ./spotify_python/requirements.txt
 

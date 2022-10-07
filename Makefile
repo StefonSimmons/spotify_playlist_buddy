@@ -1,9 +1,9 @@
 SECRET := ./spotify_python/secret.py
-VENV := senv
+VENV := ./spotify_python/senv
 AUTH := ./spotify_python/access_token.txt
 
 # Helper commands
-auth-file:
+auth_file:
 	@if [ ! -f ${AUTH} ]; then \
 	echo "creating access file.."; \
 	touch ${AUTH}; fi \

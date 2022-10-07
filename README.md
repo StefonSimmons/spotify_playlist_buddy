@@ -32,7 +32,7 @@ Click here for more: [Spotify Bash File](https://github.com/StefonSimmons/spotif
 ```bash
 make setup
 ```
-in secret.py
+edit generated "./spotify_python/secret.py":
 - user_id = [from spotify user account](https://www.spotify.com/)
 - client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
 - client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)

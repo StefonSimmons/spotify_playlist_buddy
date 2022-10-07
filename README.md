@@ -16,8 +16,8 @@ A terminal-based program mostly written in Python.
 
 ## Setup
 
-- Fork and Clone this repo
-- <code>touch secret.py</code> in the flask_app directory
+- Fork and Clone this repo locally
+- run <code>touch spotify_python/secret.py</code>
 - Add the following values to the <code>secret.py</code> file:
   - user_id = [from spotify user account](https://www.spotify.com/)
   - client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
@@ -33,27 +33,25 @@ Click here for more: [Spotify Bash File](https://github.com/StefonSimmons/spotif
 
 **Setup Environment**
 
-- Create Virtual Environment for installations using venv module:
+- Create required authentication files and virtual environment:
 
 ```bash
-python3 -m venv <name of virtual environment>
+make setup
 ```
 
 - Activate the Virtual Environment
+  > for zsh or bash
 
-  - in zsh or bash
-
-  ```bash
-  source <name of virtual environment>/bin/activate
-  ```
-
-  - [Other Options for your shell](https://docs.python.org/3/library/venv.html#module-venv)
+```bash
+source spotify_python/senv/bin/activate
+```
+  > [Other Options for your shell](https://docs.python.org/3/library/venv.html#module-venv)
 
 - Install program dependencies/packages:
   > **NOTE** make sure you are in your virtual environment
 
 ```bash
-pip install -r requirements.txt
+make install
 ```
 
 - Deactivate the Virtual Environment
@@ -62,11 +60,19 @@ pip install -r requirements.txt
 deactivate
 ```
 
-## Usage:
+- Restart Terminal
+```bash
+source .bashrc
+```
+OR
+```bash
+source .zshrc
+``` 
+OR
 
-> Save changes: restart terminal or run <code>source .bashrc</code>
->
-> Follow the prompts for each bash command:
+simply restart terminal
+
+## Usage:
 
 **Create a playlist:**
 

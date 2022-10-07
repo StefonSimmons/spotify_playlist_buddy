@@ -16,13 +16,7 @@ A terminal-based program mostly written in Python.
 
 ## Setup
 
-- Fork and Clone this repo locally
-- run <code>touch spotify_python/secret.py</code>
-- Add the following values to the <code>secret.py</code> file:
-  - user_id = [from spotify user account](https://www.spotify.com/)
-  - client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
-  - client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
-  - redirect_uri= "https://spotify-playlist-buddy.vercel.app/" (You may use this uri as your redirects_uri or your own)
+1. Fork and Clone this repo locally
 
 **Setup Bash file**
 Click here for more: [Spotify Bash File](https://github.com/StefonSimmons/spotify_bash_file)
@@ -33,13 +27,18 @@ Click here for more: [Spotify Bash File](https://github.com/StefonSimmons/spotif
 
 **Setup Environment**
 
-- Create required authentication files and virtual environment:
+1. Create required authentication files and virtual environment:
 
 ```bash
 make setup
 ```
+in secret.py
+- user_id = [from spotify user account](https://www.spotify.com/)
+- client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
+- client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
+- redirect_uri= "https://spotify-playlist-buddy.vercel.app/" (You may use this uri as your redirects_uri or your own)
 
-- Activate the Virtual Environment
+1. Activate the Virtual Environment
   > for zsh or bash
 
 ```bash
@@ -54,13 +53,7 @@ source spotify_python/senv/bin/activate
 make install
 ```
 
-- Deactivate the Virtual Environment
-
-```bash
-deactivate
-```
-
-- Restart Terminal
+1. Restart Terminal
 ```bash
 source .bashrc
 ```
@@ -71,6 +64,13 @@ source .zshrc
 OR
 
 simply restart terminal
+
+
+**In order to deactivate the virtual environment**
+
+```bash
+deactivate
+```
 
 ## Usage:
 

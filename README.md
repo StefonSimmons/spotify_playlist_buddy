@@ -16,7 +16,7 @@ A terminal-based program mostly written in Python.
 
 ## Setup
 
-1. Fork and Clone this repo locally
+Fork and Clone this repo locally
 
 ### Setup Bash file
 Click here for more: [Spotify Bash File](https://github.com/StefonSimmons/spotify_bash_file)

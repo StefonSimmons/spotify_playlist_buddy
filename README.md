@@ -18,16 +18,16 @@ A terminal-based program mostly written in Python.
 
 1. Fork and Clone this repo locally
 
-**Setup Bash file**
+### Setup Bash file
 Click here for more: [Spotify Bash File](https://github.com/StefonSimmons/spotify_bash_file)
 
 > Add this script to your shell's configuration file (.bashrc, .zshrc etc.).
 >
 > Allows you to run the Spotify Buddy program from the terminal
 
-**Setup Environment**
+### Setup Environment
 
-1. Create required authentication files and virtual environment:
+**Create required authentication files and virtual environment:**
 
 ```bash
 make setup
@@ -38,7 +38,7 @@ in secret.py
 - client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
 - redirect_uri= "https://spotify-playlist-buddy.vercel.app/" (You may use this uri as your redirects_uri or your own)
 
-1. Activate the Virtual Environment
+**Activate the Virtual Environment**
   > for zsh or bash
 
 ```bash
@@ -46,14 +46,14 @@ source spotify_python/senv/bin/activate
 ```
   > [Other Options for your shell](https://docs.python.org/3/library/venv.html#module-venv)
 
-- Install program dependencies/packages:
+**Install program dependencies/packages:**
   > **NOTE** make sure you are in your virtual environment
 
 ```bash
 make install
 ```
 
-1. Restart Terminal
+**Restart Terminal**
 ```bash
 source .bashrc
 ```

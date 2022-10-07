@@ -39,40 +39,38 @@ in secret.py
 - redirect_uri= "https://spotify-playlist-buddy.vercel.app/" (You may use this uri as your redirects_uri or your own)
 
 **Activate the Virtual Environment**
-  > for zsh or bash
 
 ```bash
+# for zsh or bash
 source spotify_python/senv/bin/activate
 ```
-  > [Other Options for your shell](https://docs.python.org/3/library/venv.html#module-venv)
+--> [Other Options for your shell](https://docs.python.org/3/library/venv.html#module-venv)
 
 **Install program dependencies/packages:**
-  > **NOTE** make sure you are in your virtual environment
 
 ```bash
+# make sure you are in your virtual environment
 make install
 ```
 
 **Restart Terminal**
 ```bash
+# bash shell
 source .bashrc
 ```
-OR
+
 ```bash
+# zsh shell
 source .zshrc
 ``` 
-OR
 
-simply restart terminal
-
-
-**In order to deactivate the virtual environment**
+**To deactivate the virtual environment**
 
 ```bash
 deactivate
 ```
 
-## Usage:
+## Usage
 
 **Create a playlist:**
 
@@ -80,9 +78,8 @@ deactivate
 spotify cp <name> "<description>"
 ```
 
-> Example:
-
 ```bash
+# Example:
 spotify cp Cookout-Playlist "Family and Summertime vibes"
 ```
 
@@ -92,9 +89,8 @@ spotify cp Cookout-Playlist "Family and Summertime vibes"
 spotify s "<query>"
 ```
 
-> Example:
-
 ```bash
+# Example:
 spotify s "Love Like Faith"
 
 # Searching for Love Like Faith...

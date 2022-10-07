@@ -32,11 +32,11 @@ Click here for more: [Spotify Bash File](https://github.com/StefonSimmons/spotif
 ```bash
 make setup
 ```
-edit generated "./spotify_python/secret.py":
-- user_id = [from spotify user account](https://www.spotify.com/)
-- client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
-- client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
-- redirect_uri= "https://spotify-playlist-buddy.vercel.app/" (You may use this uri as your redirects_uri or your own)
+- Edit generated "./spotify_python/secret.py" with the following values:
+    - user_id = [from spotify user account](https://www.spotify.com/)
+    - client_id= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
+    - client_secret= [from spotify developer account](https://developer.spotify.com/dashboard/login) (Create an app on the dashboard)
+    - redirect_uri= "https://spotify-playlist-buddy.vercel.app/" (You may use this uri as your redirects_uri or your own)
 
 **Activate the Virtual Environment**
 
